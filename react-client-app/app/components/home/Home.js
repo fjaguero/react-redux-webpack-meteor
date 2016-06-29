@@ -22,7 +22,7 @@ const Home = (props) => {
         <input
           type="text"
           styleName="add-todo-input"
-          placeholder="Add todo item ..."
+          placeholder="Add MIT  ..."
           onKeyPress={handleAddTodo}
         />
       </div>

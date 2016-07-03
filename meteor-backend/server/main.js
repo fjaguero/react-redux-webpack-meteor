@@ -25,7 +25,10 @@ Meteor.methods({
         return Todo.find().fetch();
     },
     addTodo(message) {
-        return Todo.insert({message: message});
+        return Todo.insert({
+          message: message,
+          createdAt: new Date(),
+        });
     },
     removeTodo(id) {
         return Todo.remove({_id: id});

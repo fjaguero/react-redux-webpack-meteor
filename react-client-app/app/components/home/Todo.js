@@ -23,7 +23,7 @@ const Todo = (props) => {
       <input type="checkbox" checked={finished} value="" onChange={handleEdit} />
       {message}
       <button type="button" onClick={handleRemove}>
-        <i className="fa fa-times"></i>
+        <i className="fa fa-times">x</i>
       </button>
     </div>
   );

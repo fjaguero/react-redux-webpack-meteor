@@ -8,6 +8,7 @@ import { callAddTodo } from '../../redux/async-actions';
 
 const Home = (props) => {
   const { todos, dispatchCallAddTodo } = props;
+  const currentDate = (new Date()).toLocaleDateString();
   const handleAddTodo = (e) => {
     if (e.key === 'Enter') {
       const elem = e.target;
@@ -18,16 +19,26 @@ const Home = (props) => {
   };
   return (
     <div styleName="todo-wrapper">
-      <div>
-        <input
-          type="text"
-          styleName="add-todo-input"
-          placeholder="Add MIT  ..."
-          onKeyPress={handleAddTodo}
-        />
+      <div
+        styleName="todo-day-container"
+      >
+      {currentDate}
       </div>
+      <input
+        type="text"
+        styleName="add-todo-input"
+        placeholder="Add MIT  ..."
+        onKeyPress={handleAddTodo}
+      />
       <div>
-        {todos.map((t, i) => <Todo id={t._id} message={t.message} finished={t.finished} key={i} />)}
+        {todos.map((t, i) =>
+          <Todo
+            id={t._id}
+            message={t.message}
+            finished={t.finished}
+            createdAt={t.createdAt}
+            key={i}
+          />)}
       </div>
     </div>
   );

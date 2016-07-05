@@ -6,7 +6,7 @@ Todos = new Meteor.Collection('todo');
 const Schemas = {};
 
 Schemas.Todo = new SimpleSchema({
-  text: {
+  message: {
     type: String,
     label: "Text",
     max: 200
@@ -63,9 +63,9 @@ Meteor.methods({
     getTodos() {
         return Todos.find().fetch();
     },
-    addTodo(text) {
+    addTodo(message) {
         return Todos.insert({
-          text
+          message
         });
     },
     removeTodo(id) {

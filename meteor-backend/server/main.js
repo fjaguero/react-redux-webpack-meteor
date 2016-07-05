@@ -1,7 +1,46 @@
 // declare MongoDB collection here
 //
 // Read more: http://guide.meteor.com/collections.html
-const Todo = new Meteor.Collection('todo');
+Todos = new Meteor.Collection('todo');
+
+const Schemas = {};
+
+Schemas.Todo = new SimpleSchema({
+  text: {
+    type: String,
+    label: "Text",
+    max: 200
+  },
+  createdAt: {
+    type: Date,
+    autoValue: function() {
+      if (this.isInsert) {
+        return new Date();
+      } else if (this.isUpsert) {
+        return {$setOnInsert: new Date()};
+      } else {
+        this.unset();  // Prevent user from supplying their own value
+      }
+    }
+  },
+  updatedAt: {
+     type: Date,
+     autoValue: function() {
+       if (this.isUpdate) {
+         return new Date();
+       }
+     },
+     denyInsert: true,
+     optional: true
+   },
+  finished: {
+    type: Boolean,
+    label: "Status of a todo",
+    defaultValue: false
+  }
+})
+
+Todos.attachSchema(Schemas.Todo);
 
 // We can publish some data (here all)
 // we will be able to subscribe to the data later in the client app
@@ -9,7 +48,7 @@ const Todo = new Meteor.Collection('todo');
 //
 // Read more: http://guide.meteor.com/data-loading.html
 Meteor.publish('todo', function () {
-    return Todo.find();
+    return Todos.find();
 });
 
 // We can also use server side methods and call them from our client app
@@ -19,29 +58,28 @@ Meteor.publish('todo', function () {
 // Read more: http://guide.meteor.com/methods.html
 Meteor.methods({
     getTodo(id) {
-        return Todo.findOne(id);
+        return Todos.findOne(id);
     },
     getTodos() {
-        return Todo.find().fetch();
+        return Todos.find().fetch();
     },
-    addTodo(message) {
-        return Todo.insert({
-          message: message,
-          createdAt: new Date(),
+    addTodo(text) {
+        return Todos.insert({
+          text
         });
     },
     removeTodo(id) {
-        return Todo.remove({_id: id});
+        return Todos.remove({_id: id});
     },
     editTodo(id, finished) {
-        return Todo.update({_id: id}, {$set: {finished: finished}});
+        return Todos.update({_id: id}, {$set: {finished: finished}});
     }
 });
 
 
 // Deny all client-side updates on the Lists collection
 // Read more about security stuff: http://guide.meteor.com/security.html
-Todo.deny({
+Todos.deny({
   insert() { return true; },
   update() { return true; },
   remove() { return true; },

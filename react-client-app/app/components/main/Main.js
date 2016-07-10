@@ -1,12 +1,13 @@
 import React from 'react';
 import cssModules from 'react-css-modules';
+
 import style from './styles.styl';
 import { callGetAllTodo } from '../../redux/async-actions';
 import { connect } from 'react-redux';
 
 class Main extends React.Component {
   componentDidMount() {
-    this.props.dispatch(callGetAllTodo());
+    // this.props.dispatch(callGetAllTodo());
   }
   render() {
     return (

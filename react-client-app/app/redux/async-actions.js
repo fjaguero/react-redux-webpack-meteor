@@ -1,13 +1,13 @@
-import { asteroid } from '../asteroid/asteroid';
 import { addTodo, getAllTodo, removeTodo, editTodo } from './actions';
+import { asteroid } from '../asteroid/asteroid';
 
 export function callAddTodo(message) {
   return dispatch => asteroid.call('addTodo', message)
       .then(result => dispatch(addTodo({ _id: result, message })));
 }
 
-export function callGetAllTodo() {
-  return dispatch => asteroid.call('getTodos')
+export function callGetAllTodo(startDate, endDate) {
+  return dispatch => asteroid.call('getTodos', startDate, endDate)
       .then((result) => dispatch(getAllTodo(result)));
 }
 

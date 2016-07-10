@@ -15,9 +15,9 @@ Schemas.Todo = new SimpleSchema({
     type: Date,
     autoValue: function() {
       if (this.isInsert) {
-        return new Date();
+        return moment().toDate();
       } else if (this.isUpsert) {
-        return {$setOnInsert: new Date()};
+        return {$setOnInsert: moment().toDate()};
       } else {
         this.unset();  // Prevent user from supplying their own value
       }
@@ -27,7 +27,7 @@ Schemas.Todo = new SimpleSchema({
      type: Date,
      autoValue: function() {
        if (this.isUpdate) {
-         return new Date();
+         return moment().toDate();
        }
      },
      denyInsert: true,
@@ -58,21 +58,26 @@ Meteor.publish('todo', function () {
 // Read more: http://guide.meteor.com/methods.html
 Meteor.methods({
     getTodo(id) {
-        return Todos.findOne(id);
+      return Todos.findOne(id);
     },
-    getTodos() {
-        return Todos.find().fetch();
+    getTodos(startDate, endDate) {
+      return Todos.find({
+        'createdAt': {
+          $gte: startDate,
+          $lte: endDate
+        }
+      }).fetch();
     },
     addTodo(message) {
-        return Todos.insert({
-          message
-        });
+      return Todos.insert({
+        message
+      });
     },
     removeTodo(id) {
-        return Todos.remove({_id: id});
+      return Todos.remove({_id: id});
     },
     editTodo(id, finished) {
-        return Todos.update({_id: id}, {$set: {finished: finished}});
+      return Todos.update({_id: id}, {$set: {finished: finished}});
     }
 });
 
